@@ -93,6 +93,8 @@ contract CrowdFunding {
             (bool success,) = campaign.benefactor.call{value: campaign.goal}("");
             require(success, "Failed to send Ether");
             emit campaignEnded(_campaign, campaign.goal);
+        } else {
+            revert("Campaign is still active.");
         }
     
     }
@@ -105,8 +107,16 @@ contract CrowdFunding {
             (bool success,) = campaign.benefactor.call{value: campaign.goal}("");
             require(success, "Failed to send Ether");
             emit campaignEnded(_campaign, campaign.goal);
+        } else {
+            revert("Campaign is still active.");
         }
     
+    }
+
+    // get campaing balance validated by Owner modifier
+    function getBalance(address _campaign, address _who) public Owner(_campaign, _who) view returns(uint256) {
+        Campaign storage campaign = campaigns[_campaign];
+        return campaign.goal;
     }
 
     // fetch list of created campaign adddresses
