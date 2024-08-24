@@ -42,7 +42,7 @@ contract CrowdFunding {
     // validate who initialized the campaign
     modifier Owner(address _campaign, address _who) {
         Campaign memory campaign = campaigns[_campaign];
-        require(campaign.benefactor != _who, "Wrong owner, access denied bitch!!!!!!!");
+        require(campaign.benefactor == _who, "Wrong owner, access denied bitch!!!!!!!");
         _;
     }
 
