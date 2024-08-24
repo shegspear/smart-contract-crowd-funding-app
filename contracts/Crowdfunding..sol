@@ -81,7 +81,7 @@ contract CrowdFunding {
     // donate to campaign validated by double check modifier
     function donateToCampaign(address payable _benefactor) public doubleCheck(_benefactor) payable {
         Campaign storage campaign = campaigns[_benefactor];
-        campaign.goal += msg.value;
+        campaign.amountRaised += msg.value;
         emit donationSuccessfull(msg.sender, _benefactor, msg.value);
     }
 
@@ -90,9 +90,9 @@ contract CrowdFunding {
         Campaign storage campaign = campaigns[_campaign];
 
         if(block.timestamp >= campaign.deadline) {
-            (bool success,) = campaign.benefactor.call{value: campaign.goal}("");
+            (bool success,) = campaign.benefactor.call{value: campaign.amountRaised}("");
             require(success, "Failed to send Ether");
-            emit campaignEnded(_campaign, campaign.goal);
+            emit campaignEnded(_campaign, campaign.amountRaised);
         } else {
             revert("Campaign is still active.");
         }
@@ -104,9 +104,9 @@ contract CrowdFunding {
         Campaign storage campaign = campaigns[_campaign];
 
         if(block.timestamp >= campaign.deadline) {
-            (bool success,) = campaign.benefactor.call{value: campaign.goal}("");
+            (bool success,) = campaign.benefactor.call{value: campaign.amountRaised}("");
             require(success, "Failed to send Ether");
-            emit campaignEnded(_campaign, campaign.goal);
+            emit campaignEnded(_campaign, campaign.amountRaised);
         } else {
             revert("Campaign is still active.");
         }
@@ -116,7 +116,7 @@ contract CrowdFunding {
     // get campaing balance validated by Owner modifier
     function getBalance(address _campaign, address _who) public Owner(_campaign, _who) view returns(uint256) {
         Campaign storage campaign = campaigns[_campaign];
-        return campaign.goal;
+        return campaign.amountRaised;
     }
 
     // fetch list of created campaign adddresses
