@@ -22,7 +22,7 @@ contract CrowdFunding {
 
     // validate if campaign goal is greater than zero
     modifier greaterThanZero(uint256 _goal) {
-        require(_goal <= 0, "Sorry campaign goal must be greater than zero.");
+        require(_goal > 0, "Sorry campaign goal must be greater than zero.");
         _;
     }
 
